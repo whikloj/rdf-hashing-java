@@ -1,4 +1,4 @@
-[![travis](https://api.travis-ci.org/whikloj/java-rdf-hashing.svg?branch=master)](https://travis-ci.org/whikloj/java-rdf-hashing)
+[![travis](https://api.travis-ci.org/whikloj/rdf-hashing-java.svg?branch=master)](https://travis-ci.org/whikloj/rdf-hashing-java)
 [![codecov](https://codecov.io/gh/whikloj/rdf-hashing-java/branch/master/graph/badge.svg)](https://codecov.io/gh/whikloj/rdf-hashing-java)
 
 
