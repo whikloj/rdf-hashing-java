@@ -94,3 +94,19 @@ test {
         exceptionFormat = 'full'
     }
 }
+
+
+task codeCoverageReport(type: JacocoReport) {
+    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+
+    sourceSets sourceSets.main
+
+    reports {
+        xml.enabled true
+        xml.destination file("${buildDir}/reports/jacoco/report.xml")
+        html.enabled true
+        html.destination file("${buildDir}/reports/jacoco/html")
+        csv.enabled false
+    }
+}
+
