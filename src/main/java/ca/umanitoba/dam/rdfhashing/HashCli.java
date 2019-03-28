@@ -1,9 +1,7 @@
 package ca.umanitoba.dam.rdfhashing;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 
 import org.apache.commons.cli.CommandLine;
@@ -20,19 +18,16 @@ public class HashCli {
 
     /**
      * @param fileLocation file uri.
-     * @param baseUri base uri of the graph.
-     * @param format format of the RDF.
      * @return the Jena model.
      * @throws FileNotFoundException file is not found.
      * @throws NoSuchAlgorithmException SHA-256 algorithm not available.
      */
-    private static Model loadFromFile(final String fileLocation, final String baseUri, final String format)
+    private static Model loadFromFile(final String fileLocation)
             throws FileNotFoundException, NoSuchAlgorithmException {
         final File rdfFile = new File(fileLocation);
         if (rdfFile.exists() && !rdfFile.isDirectory() && rdfFile.canRead()) {
-            final InputStream graphStream = new FileInputStream(rdfFile);
             final Model graph = ModelFactory.createDefaultModel();
-            graph.read(graphStream, baseUri, format);
+            graph.read(fileLocation);
             return graph;
         }
         return null;
@@ -74,10 +69,8 @@ public class HashCli {
         final Options options = new Options();
         final Option sourceOpt = new Option("s", "source", true, "Source of the RDF graph");
         sourceOpt.setRequired(true);
-
         options.addOption(sourceOpt);
-        options.addOption(new Option("b", "baseuri", true, "Base URI (for file parsing)"));
-        options.addOption(new Option("f", "format", true, "RDF format (for file parsing)"));
+        options.addOption(new Option("d", "debug", false, "Print the graph string before the hash"));
 
         final CommandLineParser parser = new DefaultParser();
         final CommandLine cmd;
@@ -94,20 +87,13 @@ public class HashCli {
 
             graph = loadFromUrl(source);
         } else {
-            // A file
-            final String baseuri = cmd.getOptionValue("baseuri");
-            if (baseuri == null) {
-                printHelpAndExit("--baseuri is required for file source", options);
-                return;
-            }
-            final String format = cmd.getOptionValue("format");
-            if (format == null) {
-                printHelpAndExit("--format is required for file source", options);
-                return;
-            }
-            graph = loadFromFile(source, baseuri, format);
+            graph = loadFromFile(source);
         }
         if (graph != null) {
+            if (cmd.hasOption("debug")) {
+                final String graphString = RdfHash.getGraphString(graph);
+                System.out.println(graphString);
+            }
             final String hash = RdfHash.calculate(graph);
             System.out.println(hash);
         } else {

@@ -2,10 +2,10 @@ package ca.umanitoba.dam.rdfhashing;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -67,14 +67,13 @@ public class RdfHash {
      * Calculate the SHA256 Hash of a graph.
      *
      * @param graph The graph.
-     * @return The sha256 hash value.
+     * @return The sha256 hexidecimal hash value.
      * @throws NoSuchAlgorithmException If there is no SHA-256 algorithm.
      */
     public static String calculate(final Model graph) throws NoSuchAlgorithmException {
         final MessageDigest md = MessageDigest.getInstance("SHA-256");
         md.update(getGraphString(graph).getBytes(UTF_8));
-
-        return Base64.getEncoder().encodeToString(md.digest());
+        return String.format("%064x", new BigInteger(1, md.digest()));
 
     }
 
@@ -84,9 +83,7 @@ public class RdfHash {
      * @param graph The graph.
      * @return The algorithm string.
      */
-    public static String getGraphString(final Model graph)
-    {
-
+    public static String getGraphString(final Model graph) {
         final Set<String> subjectSet = new TreeSet<>();
         final List<Resource> subjects = graph.listSubjects().toList();
 

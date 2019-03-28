@@ -59,22 +59,28 @@ class Example {
 `rdf-hashing-VERSION-all.jar` is a shadow jar containing all dependencies which allows you to access a command line interface.
 
 ```bash
-> java -jar build/libs/rdf-hashing-0.0.1-all.jar
+> java -jar build/libs/rdf-hashing-0.0.1-all.jar                                                                
 Missing required option: s
-usage: RdfHash
- -b,--baseuri <arg>   Base URI (for file parsing)
- -f,--format <arg>    RDF format (for file parsing)
- -s,--source <arg>    Source of the RDF graph
+usage: java -jar rdf-hashing-VERSION-all.jar
+ -d,--debug          Print the graph string before the hash
+ -s,--source <arg>   Source of the RDF graph
 ```
 
-Passing a source HTTP URI to the tool it will attempt to retrieve and parse the graph and then provide the hash.
-
-Passing a source file path to the tool, will also require a jena format (values found [here](https://jena.apache.org/documentation/javadoc/jena/constant-values.html#org.apache.jena.util.FileUtils.langXML)) and a base URI (this can be anything and I'll probably remove the requirement).
+Passing a source HTTP URI or file path to the tool it will attempt to retrieve and parse the graph and then provide the hash.
 
 ```bash
-> java -jar build/libs/rdf-hashing-0.0.1-all.jar -s ./src/test/resources/supersimple.ttl -b http://example.org/object1 -f TURTLE
-Hash of graph is w/L5iKLjOetmIrov4NZFL/+xsSP+2Ue6ZpANibbjq1w=
-```    
+> java -jar build/libs/rdf-hashing-0.0.1-all.jar -s ./src/test/resources/supersimple.ttl
+c3f2f988a2e339eb6622ba2fe0d6452fffb1b123fed947ba66900d89b6e3ab5c
+```
+
+You can also pass the `-d|--debug` argument to see the graph string before it is hashed.
+
+```bash
+> java -jar build/libs/rdf-hashing-0.0.1-all.jar -s ./src/test/resources/supersimple.ttl --debug
+{*(http://ex#pred[*(http://ex#pred[http://ex#A][http://ex#C])][http://ex#C])}{*(http://ex#pred[*(http://ex#pred[http://ex#B][http://ex#C])][http://ex#C])}{*(http://ex#pred[http://ex#A][http://ex#C])}{*(http://ex#pred[http://ex#B][http://ex#C])}
+c3f2f988a2e339eb6622ba2fe0d6452fffb1b123fed947ba66900d89b6e3ab5c
+```
+
 
 ### License
 
