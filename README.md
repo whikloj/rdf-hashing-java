@@ -1,4 +1,6 @@
 [![travis](https://api.travis-ci.org/whikloj/java-rdf-hashing.svg?branch=master)](https://travis-ci.org/whikloj/java-rdf-hashing)
+[![codecov](https://codecov.io/gh/whikloj/rdf-hashing-java/branch/master/graph/badge.svg)](https://codecov.io/gh/whikloj/rdf-hashing-java)
+
 
 ## Introduction
 
@@ -27,6 +29,11 @@ Beside the sources and javadoc jars are the jars for the two methods of use.
 ### Library
 
 `rdf-hashing-VERSION.jar` is just the library code and can be used to include this tool in your code.
+
+The `RdfHash` class has two static functions.
+
+* `RdfHash.calculate(model)` takes a Jena Model and returns the hexadecimal sha256 hash for it.
+* `RdfHash.getGraphString(model)` takes a Jena Model and returns the parsed formatted string of the graph ready for generating the hash.
 
 ```java
 
