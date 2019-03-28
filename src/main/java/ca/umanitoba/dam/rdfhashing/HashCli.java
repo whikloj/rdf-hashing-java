@@ -47,7 +47,7 @@ public class HashCli {
     private static void printHelpAndExit(final String message, final Options options) {
         final HelpFormatter formatter = new HelpFormatter();
         System.err.println(message);
-        formatter.printHelp("RdfHash", options);
+        formatter.printHelp("java -jar rdf-hashing-VERSION-all.jar", options);
         System.exit(1);
     }
 
@@ -109,7 +109,7 @@ public class HashCli {
         }
         if (graph != null) {
             final String hash = RdfHash.calculate(graph);
-            System.out.println(String.format("Hash of graph is %s", hash));
+            System.out.println(hash);
         } else {
             System.err.println("No graph loaded");
         }

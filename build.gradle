@@ -18,7 +18,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 ext {
-	buildName = "java-rdf-hashing"
+	buildName = "rdf-hashing"
     versions = [
     		commonsCli : '1.4',
     		commonsIo : '1.3.2',
@@ -62,20 +62,6 @@ jar {
     version = project.version
 }
 
-// Executable jar with all dependencies.
-task fatJar(type: Jar) {
-	group = BasePlugin.BUILD_GROUP
-	mustRunAfter "jar"
-	description = 'Create executable jar with all dependencies'
-    manifest {
-        attributes 'Implementation-Title': buildName,
-    			'Implementation-Version': project.version,
-    			'Main-Class': project.group + '.HashCli'
-    }
-    archiveName = buildName + "-" + project.version + "-all.jar"
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-}
-
 shadowJar {
    baseName = buildName
    classifier = "all"
@@ -108,4 +94,3 @@ test {
         exceptionFormat = 'full'
     }
 }
-
