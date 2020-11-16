@@ -1,4 +1,4 @@
-[![travis](https://api.travis-ci.org/whikloj/rdf-hashing-java.svg?branch=master)](https://travis-ci.org/whikloj/rdf-hashing-java)
+[![Github Actions](https://github.com/whikloj/rdf-hashing-java/workflows/Build/badge.svg)](https://github.com/whikloj/rdf-hashing-java/actions?query=workflow%3A%22Build%22)
 [![codecov](https://codecov.io/gh/whikloj/rdf-hashing-java/branch/master/graph/badge.svg)](https://codecov.io/gh/whikloj/rdf-hashing-java)
 
 
