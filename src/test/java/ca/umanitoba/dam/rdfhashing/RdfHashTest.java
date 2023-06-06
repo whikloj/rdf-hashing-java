@@ -37,6 +37,21 @@ public class RdfHashTest {
         assertEquals(turtleHash, ntriplesHash, "Hashes do not match");
     }
 
+    @Test
+    public void testLanguageTags() throws Exception {
+        final Model lang1 = getFromFile("language_tags1.ttl", "http://example.org/test4/ttl1", langTurtle);
+        final Model lang2 = getFromFile("language_tags2.ttl", "http://example.org/test4/ttl2", langTurtle);
+        final Model lang3 = getFromFile("language_tags3.ttl", "http://example.org/test4/ttl3", langTurtle);
+        assertNotNull(lang1);
+        assertNotNull(lang2);
+        assertNotNull(lang3);
+        final String hash1 = RdfHash.calculate(lang1);
+        final String hash2 = RdfHash.calculate(lang2);
+        final String hash3 = RdfHash.calculate(lang3);
+        assertEquals(hash1, hash2);
+        assertEquals(hash1, hash3);
+    }
+
     /**
      * Test runner
      *

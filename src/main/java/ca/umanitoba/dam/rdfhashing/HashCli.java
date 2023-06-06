@@ -48,11 +48,8 @@ public class HashCli {
     /**
      * @param fileLocation file uri.
      * @return the Jena model.
-     * @throws FileNotFoundException file is not found.
-     * @throws NoSuchAlgorithmException SHA-256 algorithm not available.
      */
-    private static Model loadFromFile(final String fileLocation)
-            throws FileNotFoundException, NoSuchAlgorithmException {
+    private static Model loadFromFile(final String fileLocation) {
         final File rdfFile = new File(fileLocation);
         if (rdfFile.exists() && !rdfFile.isDirectory() && rdfFile.canRead()) {
             final Model graph = ModelFactory.createDefaultModel();
@@ -96,22 +93,23 @@ public class HashCli {
      */
     private static Model loadFromUrl(final String sourceUrl, final String username, final String password)
             throws ClientProtocolException, IOException {
-        final CloseableHttpClient client = createClient(username, password);
-        final HttpGet getReq = new HttpGet(sourceUrl);
-        try (final CloseableHttpResponse response = client.execute(getReq)) {
-            final String contentType;
-            if (response.getFirstHeader(HttpHeaders.CONTENT_TYPE).getValue().contains(";")) {
-                contentType = response.getFirstHeader(HttpHeaders.CONTENT_TYPE)
-                        .getValue().substring(0, response.getFirstHeader(HttpHeaders.CONTENT_TYPE)
-                                .getValue().indexOf(";"));
-            } else {
-                contentType = response.getFirstHeader(HttpHeaders.CONTENT_TYPE).getValue();
-            }
+        try (final CloseableHttpClient client = createClient(username, password)) {
+            final HttpGet getReq = new HttpGet(sourceUrl);
+            try (final CloseableHttpResponse response = client.execute(getReq)) {
+                final String contentType;
+                if (response.getFirstHeader(HttpHeaders.CONTENT_TYPE).getValue().contains(";")) {
+                    contentType = response.getFirstHeader(HttpHeaders.CONTENT_TYPE)
+                            .getValue().substring(0, response.getFirstHeader(HttpHeaders.CONTENT_TYPE)
+                                    .getValue().indexOf(";"));
+                } else {
+                    contentType = response.getFirstHeader(HttpHeaders.CONTENT_TYPE).getValue();
+                }
 
-            final Lang language = RDFLanguages.contentTypeToLang(contentType);
-            final Model graph = ModelFactory.createDefaultModel();
-            graph.read(response.getEntity().getContent(), sourceUrl, language.getName());
-            return graph;
+                final Lang language = RDFLanguages.contentTypeToLang(contentType);
+                final Model graph = ModelFactory.createDefaultModel();
+                graph.read(response.getEntity().getContent(), sourceUrl, language.getName());
+                return graph;
+            }
         }
     }
 

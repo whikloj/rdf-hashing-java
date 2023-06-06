@@ -1,0 +1,7 @@
+@base  <http://example.org/language> .
+@prefix dc:   <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+<> a foaf:Person ;
+  dc:title "Something in English"@en ;
+  dc:title "Quelque chose en français"@fr .

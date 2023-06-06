@@ -22,42 +22,42 @@ public class RdfHash {
     /**
      * Subject block prefix.
      */
-    private static String SUBJECT_START = "{";
+    private static final String SUBJECT_START = "{";
 
     /**
      * Subject block suffix.
      */
-    private static String SUBJECT_END = "}";
+    private static final String SUBJECT_END = "}";
 
     /**
      * Property block prefix.
      */
-    private static String PROPERTY_START = "(";
+    private static final String PROPERTY_START = "(";
 
     /**
      * Property block suffix.
      */
-    private static String PROPERTY_END = ")";
+    private static final String PROPERTY_END = ")";
 
     /**
      * Object block prefix.
      */
-    private static String OBJECT_START = "[";
+    private static final String OBJECT_START = "[";
 
     /**
      * Object block suffix.
      */
-    private static String OBJECT_END = "]";
+    private static final String OBJECT_END = "]";
 
     /**
      * Blank node constant.
      */
-    private static String BLANK_NODE = "*";
+    private static final String BLANK_NODE = "*";
 
     /**
      * The currently visited nodes for any resource.
      */
-    private static Set<String> visitedNodes;
+    private static final Set<String> visitedNodes;
 
     static {
         visitedNodes = new TreeSet<>();
@@ -106,7 +106,6 @@ public class RdfHash {
      * Encode a subject from the graph to a string.
      *
      * @param resource The subject resource.
-     * @param visitedNodes Array of visited blank nodes.
      * @param graph The original graph.
      * @return The subject encoded as a string.
      */
@@ -131,29 +130,28 @@ public class RdfHash {
      * Encode the properties of a resource to a string.
      *
      * @param resource The subject resource.
-     * @param visitedNodes Array of visited blank nodes.
      * @param graph The original graph
      * @return The properties encoded as a string.
      */
     private static String encodeProperties(final Resource resource, final Model graph) {
 
         final Set<Statement> all_properties = resource.listProperties().toSet();
-        final List<Property> sorted_properties = all_properties.stream().map(t -> t.getPredicate()).distinct()
+        final List<Property> sorted_properties = all_properties.stream().map(Statement::getPredicate).distinct()
                 .sorted((t1, t2) -> t1.getURI().compareToIgnoreCase(t2.getURI())).collect(Collectors
                 .toList());
 
-        final StringBuffer result = new StringBuffer();
+        final StringBuilder result = new StringBuilder();
 
         for (final Property property : sorted_properties) {
             final Set<String> objectStrings = new TreeSet<>();
-            result.append(PROPERTY_START + property.getURI());
+            result.append(PROPERTY_START).append(property.getURI());
             final List<Statement> objectNodes = resource.listProperties(property).toList();
             for (final Statement object : objectNodes) {
                 objectStrings.add(encodeObject(object.getObject(), graph));
             }
             final List<String> sortedObjects = objectStrings.stream().sorted().collect(Collectors.toList());
             for (final String object_string : sortedObjects) {
-                result.append(OBJECT_START + object_string + OBJECT_END);
+                result.append(OBJECT_START).append(object_string).append(OBJECT_END);
             }
             result.append(PROPERTY_END);
         }
@@ -164,7 +162,6 @@ public class RdfHash {
      * Encode the object of a property to a string.
      *
      * @param object The object to encode.
-     * @param visitedNodes Array of visited blank nodes.
      * @param graph The original graph.
      * @return The object encoded as a string.
      */
